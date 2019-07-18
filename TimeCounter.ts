@@ -1,22 +1,26 @@
-console.log("initialize");
 class timeDiffgetter {
   startTime: string = '';
   endTime: string = '';
+  liveCurrentTime: boolean = true;
  public currentTimeFillMethod():void {
-    var today = new Date();
-    this.startTime = ((today.getHours() < 10) ? "0" : "") + today.getHours() + ":" + ((today.getMinutes() < 10) ? "0" : "") + today.getMinutes()+ ':' + ((today.getSeconds() < 10) ? "0" : "") + today.getSeconds();
-    this.setInput("startTime", this.startTime);
+  if(timeDiffObj.liveCurrentTime) {
+    setInterval(function(){
+      timeDiffObj.setInput("startTime", timeDiffObj.currentTime());
+    },1000);
   }
-  setInnerHTML(typeValue: string, value: string, type: string = "id")
-  {
+ }
+  currentTime() {
+    var today = new Date();
+    return (((today.getHours() < 10) ? "0" : "") + today.getHours() + ":" + ((today.getMinutes() < 10) ? "0" : "") + today.getMinutes()+ ':' + ((today.getSeconds() < 10) ? "0" : "") + today.getSeconds());
+  }
+  setInnerHTML(typeValue: string, value: string, type: string = "id") {
     switch(type) {
       case 'id': 
         document.getElementById(typeValue).innerHTML = value;
         break;
     }
   }
-  setInput(typeValue: string, value: string, type: string = "id")
-  {
+  setInput(typeValue: string, value: string, type: string = "id") {
     switch(type) {
       case 'id': 
         (<HTMLInputElement>document.getElementById(typeValue)).value = value;
@@ -24,6 +28,7 @@ class timeDiffgetter {
     }
   }
 }
+
 var timeDiffObj = new timeDiffgetter();
 const currentTimeFill = () => {
   timeDiffObj.currentTimeFillMethod();
