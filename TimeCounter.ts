@@ -2,13 +2,26 @@ class timeDiffgetter {
   startTime: string = '';
   endTime: string = '';
   liveCurrentTime: boolean = true;
+  currentTimeInterval;
+
  public currentTimeFillMethod():void {
-  if(timeDiffObj.liveCurrentTime) {
-    setInterval(function(){
-      timeDiffObj.setInput("startTime", timeDiffObj.currentTime());
+   this.liveCurrentTime = true;
+   this.currentTimeInterval = setInterval(function(){
+      if(timeDiffObj.liveCurrentTime) {
+        timeDiffObj.setInput("startTime", timeDiffObj.currentTime());
+      } else {
+        return;
+      }
     },1000);
   }
- }
+  reset() {
+    this.resetCurrentTimer();
+  }
+  resetCurrentTimer() {
+    this.liveCurrentTime = false;
+    clearInterval(this.currentTimeInterval);
+    this.setInput("startTime", "");
+  }
   currentTime() {
     var today = new Date();
     return (((today.getHours() < 10) ? "0" : "") + today.getHours() + ":" + ((today.getMinutes() < 10) ? "0" : "") + today.getMinutes()+ ':' + ((today.getSeconds() < 10) ? "0" : "") + today.getSeconds());
@@ -39,5 +52,5 @@ const timeDiff = () => {
 }
 
 const reset = () => {
-  console.log("reset");
+  timeDiffObj.reset();
 }
