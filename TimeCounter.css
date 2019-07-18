@@ -1,0 +1,25 @@
+.defination {
+  color: red;
+  font-size: 30px;
+}
+
+.bodyClass {
+  text-align: center;
+}
+
+.col {
+  display: inline-block;
+  margin: 100px;
+  text-align: center;
+}
+
+.info {
+  color: red;
+  border-bottom: 1px solid red;
+}
+
+.time {
+  margin-top: 15px;
+  width: 100px;
+  color: red;
+}

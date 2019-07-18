@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="TimeCounter.css" />
+    <script src="TimeCounter.js"></script>
+  </head>
+  <body class="bodyClass">
+    <div class="defination">
+      This App helps you to find differnce b/w two times in hours/mins
+    </div>
+    <div>
+      <div class="col">
+        <span class="info">Enter starting time or <br />
+          <button onClick="currentTimeDiff()"> fill current time</button>
+        </span>
+        <br>
+        <input id="startTime" class="time" type="time" step='1'>
+      </div>
+      <div class="col">
+        <span class="info">Enter leaving time</span><br>
+        <input id="endTime" class="time" type="time" step='1'>
+      </div>
+      <br>
+      <button onclick="timeDiff()">Find time Difference</button><br>
+      <button id="reset" onclick="reset()">Reset all</button><br>
+      <span id="timediffer" class="info"></span>
+    </div>
+  </body>
+</html>
