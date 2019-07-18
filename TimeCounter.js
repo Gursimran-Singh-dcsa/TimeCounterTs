@@ -5,11 +5,23 @@ var timeDiffgetter = /** @class */ (function () {
         this.liveCurrentTime = true;
     }
     timeDiffgetter.prototype.currentTimeFillMethod = function () {
-        if (timeDiffObj.liveCurrentTime) {
-            setInterval(function () {
+        this.liveCurrentTime = true;
+        this.currentTimeInterval = setInterval(function () {
+            if (timeDiffObj.liveCurrentTime) {
                 timeDiffObj.setInput("startTime", timeDiffObj.currentTime());
-            }, 1000);
-        }
+            }
+            else {
+                return;
+            }
+        }, 1000);
+    };
+    timeDiffgetter.prototype.reset = function () {
+        this.resetCurrentTimer();
+    };
+    timeDiffgetter.prototype.resetCurrentTimer = function () {
+        this.liveCurrentTime = false;
+        clearInterval(this.currentTimeInterval);
+        this.setInput("startTime", "");
     };
     timeDiffgetter.prototype.currentTime = function () {
         var today = new Date();
@@ -25,6 +37,7 @@ var timeDiffgetter = /** @class */ (function () {
     };
     timeDiffgetter.prototype.setInput = function (typeValue, value, type) {
         if (type === void 0) { type = "id"; }
+        console.log("i am still called");
         switch (type) {
             case 'id':
                 document.getElementById(typeValue).value = value;
@@ -41,5 +54,5 @@ var timeDiff = function () {
     console.log("timeDiff");
 };
 var reset = function () {
-    console.log("reset");
+    timeDiffObj.reset();
 };
