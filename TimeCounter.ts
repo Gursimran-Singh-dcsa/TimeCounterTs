@@ -37,7 +37,19 @@ class timeDiffgetter {
         this.setInnerHTML("timediffer", 'incorrect timings, Starting Time cannot be greater than end time');
         return;
       }
+      this.getTimeDiff(startHour, startMin, startSec, endHour, endMin, endSec);
     }
+  }
+
+  getTimeDiff(startHour:number, startMin:number, startSec:number, endHour:number, endMin:number, endSec:number) {
+    var totalStartSec:number = (startHour * 3600) + (startMin * 60) + startSec;
+    var totalEndSec:number = (endHour * 3600) + (endMin * 60) + endSec;
+    var timeDiffInSec:number = totalEndSec - totalStartSec;
+    var hourDiff:number = Math.floor(timeDiffInSec / 3600);
+    var minDiff:number = timeDiffInSec % 3600;
+    minDiff = Math.floor(minDiff / 60);
+    var secDiff:number = (timeDiffInSec % 60);
+    this.setInnerHTML("timediffer", "time differnce is " + hourDiff + " hours and " + minDiff + " minutes " + secDiff + " seconds" )
   }
 
   validateTime(startHour:number, startMin:number, startSec:number, endHour:number, endMin:number, endSec:number): boolean {
@@ -52,7 +64,7 @@ class timeDiffgetter {
 
   timeBreaker(time:string)
   {
-    return ([parseInt(time.slice(0,2)), parseInt(time.slice(3,5)), parseInt(time.slice(6,8))])
+    return ([parseInt(time.slice(0,2)), parseInt(time.slice(3,5)), parseInt((time.slice(6,8) == "") ? "0" : time.slice(6,8))])
   }
 
   resetCurrentTimer() {
