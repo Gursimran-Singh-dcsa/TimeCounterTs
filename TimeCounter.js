@@ -19,30 +19,44 @@ var timeDiffgetter = /** @class */ (function () {
         this.resetCurrentTimer();
         this.resetDiffString();
         this.setInput("endTime", "");
+        clearInterval(this.liveCalculatorInterval);
     };
     timeDiffgetter.prototype.timeDiff = function () {
+        clearInterval(this.liveCalculatorInterval);
+        if (this.liveCurrentTime) {
+            this.liveCalculatorInterval = setInterval(function () {
+                timeDiffObj.timeDiffMethod();
+            }, 1000);
+        }
+        else {
+            this.timeDiffMethod();
+        }
+    };
+    timeDiffgetter.prototype.timeDiffMethod = function () {
         var _a, _b;
+        console.log("i am still called");
         this.startTime = document.getElementById("startTime").value;
         this.endTime = document.getElementById("endTime").value;
         if (this.startTime.trim() == '' || this.endTime.trim() == '') {
             this.setInnerHTML("timediffer", "please enter time first");
+            clearInterval(this.liveCalculatorInterval);
+            return;
         }
         else {
             this.setInnerHTML("timediffer", '');
             var startHour, startMin, startSec, endHour, endMin, endSec;
-            console.log(this.endTime.length);
             _a = this.timeBreaker(this.startTime), startHour = _a[0], startMin = _a[1], startSec = _a[2];
             _b = this.timeBreaker(this.endTime), endHour = _b[0], endMin = _b[1], endSec = _b[2];
             var ValidateResult = this.validateTime(startHour, startMin, startSec, endHour, endMin, endSec);
             if (!ValidateResult) {
                 this.setInnerHTML("timediffer", 'incorrect timings, Starting Time cannot be greater than end time');
+                clearInterval(this.liveCalculatorInterval);
                 return;
             }
             this.getTimeDiff(startHour, startMin, startSec, endHour, endMin, endSec);
         }
     };
     timeDiffgetter.prototype.getTimeDiff = function (startHour, startMin, startSec, endHour, endMin, endSec) {
-        console.log(startHour, startMin, startSec, endHour, endMin, endSec);
         var totalStartSec = (startHour * 3600) + (startMin * 60) + startSec;
         var totalEndSec = (endHour * 3600) + (endMin * 60) + endSec;
         var timeDiffInSec = totalEndSec - totalStartSec;
@@ -50,7 +64,6 @@ var timeDiffgetter = /** @class */ (function () {
         var minDiff = timeDiffInSec % 3600;
         minDiff = Math.floor(minDiff / 60);
         var secDiff = (timeDiffInSec % 60);
-        console.log(hourDiff, minDiff, secDiff);
         this.setInnerHTML("timediffer", "time differnce is " + hourDiff + " hours and " + minDiff + " minutes " + secDiff + " seconds");
     };
     timeDiffgetter.prototype.validateTime = function (startHour, startMin, startSec, endHour, endMin, endSec) {
