@@ -17,11 +17,46 @@ var timeDiffgetter = /** @class */ (function () {
     };
     timeDiffgetter.prototype.reset = function () {
         this.resetCurrentTimer();
+        this.resetDiffString();
+        this.setInput("endTime", "");
+    };
+    timeDiffgetter.prototype.timeDiff = function () {
+        var _a, _b;
+        this.startTime = document.getElementById("startTime").value;
+        this.endTime = document.getElementById("endTime").value;
+        if (this.startTime.trim() == '' || this.endTime.trim() == '') {
+            this.setInnerHTML("timediffer", "please enter time first");
+        }
+        else {
+            this.setInnerHTML("timediffer", '');
+            var startHour, startMin, startSec, endHour, endMin, endSec;
+            _a = this.timeBreaker(this.startTime), startHour = _a[0], startMin = _a[1], startSec = _a[2];
+            _b = this.timeBreaker(this.endTime), endHour = _b[0], endMin = _b[1], endSec = _b[2];
+            var ValidateResult = this.validateTime(startHour, startMin, startSec, endHour, endMin, endSec);
+            if (!ValidateResult) {
+                this.setInnerHTML("timediffer", 'incorrect timings, Starting Time cannot be greater than end time');
+                return;
+            }
+        }
+    };
+    timeDiffgetter.prototype.validateTime = function (startHour, startMin, startSec, endHour, endMin, endSec) {
+        var timeIsValid = true;
+        if ((startHour > endHour) || (startHour == endHour && startMin > endMin) || (startHour == endHour && startMin == endMin && startSec > endSec)) {
+            timeIsValid = false;
+            return timeIsValid;
+        }
+        return timeIsValid;
+    };
+    timeDiffgetter.prototype.timeBreaker = function (time) {
+        return ([parseInt(time.slice(0, 2)), parseInt(time.slice(3, 5)), parseInt(time.slice(6, 8))]);
     };
     timeDiffgetter.prototype.resetCurrentTimer = function () {
         this.liveCurrentTime = false;
         clearInterval(this.currentTimeInterval);
         this.setInput("startTime", "");
+    };
+    timeDiffgetter.prototype.resetDiffString = function () {
+        this.setInnerHTML("timediffer", "");
     };
     timeDiffgetter.prototype.currentTime = function () {
         var today = new Date();
@@ -37,7 +72,6 @@ var timeDiffgetter = /** @class */ (function () {
     };
     timeDiffgetter.prototype.setInput = function (typeValue, value, type) {
         if (type === void 0) { type = "id"; }
-        console.log("i am still called");
         switch (type) {
             case 'id':
                 document.getElementById(typeValue).value = value;
@@ -51,7 +85,7 @@ var currentTimeFill = function () {
     timeDiffObj.currentTimeFillMethod();
 };
 var timeDiff = function () {
-    console.log("timeDiff");
+    timeDiffObj.timeDiff();
 };
 var reset = function () {
     timeDiffObj.reset();
