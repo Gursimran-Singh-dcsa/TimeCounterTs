@@ -3,6 +3,7 @@ class timeDiffgetter {
   endTime: any = '';
   liveCurrentTime: boolean = true;
   currentTimeInterval;
+  liveCalculatorInterval;
 
   currentTimeFillMethod():void {
    this.liveCurrentTime = true;
@@ -19,14 +20,27 @@ class timeDiffgetter {
     this.resetCurrentTimer();
     this.resetDiffString();
     this.setInput("endTime", "");
-
+    clearInterval(this.liveCalculatorInterval);
   }
 
   timeDiff() {
+    clearInterval(this.liveCalculatorInterval);
+    if(this.liveCurrentTime) {
+      this.liveCalculatorInterval = setInterval(function() {
+        timeDiffObj.timeDiffMethod()
+      }, 1000);
+    } else {
+      this.timeDiffMethod();
+    }
+  }
+
+  timeDiffMethod() {
     this.startTime = (<HTMLInputElement>document.getElementById("startTime")).value;
     this.endTime = (<HTMLInputElement>document.getElementById("endTime")).value;
     if(this.startTime.trim() == '' || this.endTime.trim() == '') {
       this.setInnerHTML("timediffer", "please enter time first");
+      clearInterval(this.liveCalculatorInterval);
+      return;
     } else {
       this.setInnerHTML("timediffer", '');
       var startHour, startMin, startSec, endHour, endMin, endSec;
@@ -35,6 +49,7 @@ class timeDiffgetter {
       var ValidateResult = this.validateTime(startHour, startMin, startSec, endHour, endMin, endSec);
       if(!ValidateResult) {
         this.setInnerHTML("timediffer", 'incorrect timings, Starting Time cannot be greater than end time');
+        clearInterval(this.liveCalculatorInterval);
         return;
       }
       this.getTimeDiff(startHour, startMin, startSec, endHour, endMin, endSec);
